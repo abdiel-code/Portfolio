@@ -50,12 +50,21 @@ const WaterSurface = ({ depth, speed, opacity }: WaterSurfaceProps) => {
 
   const fragmentShader = `
     uniform float uOpacity;
-    varying vec2 vUv;
+    uniform float uTime;
+    varying vec2 vUv;    
 
     void main() {
+      float ray1 = sin(vUv.x * 8.0 + uTime * 0.2) * 0.5 + 0.5;
+      float ray2 = sin(vUv.x * 5.0 - uTime * 0.15) * 0.5 + 0.5;
+      float rays = pow(ray1 * ray2, 3.0);
+      float depthFade = exp(-vUv.y * 2.0);
+
       vec3 deep = vec3(0.0, 0.0, 0.0);
       vec3 surface = vec3(0.004, 0.486, 0.776);
-      vec3 color = mix(deep, surface, vUv.y);
+      vec3 lightRay = vec3(0.561, 0.816, 0.867);
+      vec3 color = mix(deep, surface, vUv.y+0.2);
+
+      color += lightRay * rays * vUv.y * depthFade * 0.4;
       gl_FragColor = vec4(color, uOpacity);
     }
   `;
