@@ -1,7 +1,9 @@
+import WaterCanvas from "./components/canvas/WaterCanvas";
+
 function App() {
   return (
     <div>
-      {/*WaterCanvas*/}
+      <WaterCanvas />
       <nav></nav>
       <main>
         {/*Hero*/}
