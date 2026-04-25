@@ -1,5 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import WaterSurface from "./WaterSurface";
+import Bubbles from "./Bubbles";
 
 /*
   Hex:
@@ -25,8 +26,8 @@ const WaterCanvas = () => {
   return (
     <div className="fixed z-0 inset-0 bg-[#01455E]">
       <Canvas orthographic camera={{ position: [0, 0, 5], zoom: 100 }}>
-        <WaterSurface depth={-0.5} speed={0.6} opacity={0.5} />
-        <WaterSurface depth={0} speed={1.0} opacity={1.0} />
+        <WaterSurface speed={1.0} opacity={1.0} />
+        <Bubbles />
       </Canvas>
     </div>
   );

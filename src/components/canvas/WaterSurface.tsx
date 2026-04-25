@@ -3,12 +3,11 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
 type WaterSurfaceProps = {
-  depth?: number;
   speed?: number;
   opacity?: number;
 };
 
-const WaterSurface = ({ depth, speed = 1, opacity = 1 }: WaterSurfaceProps) => {
+const WaterSurface = ({ speed = 1, opacity = 1 }: WaterSurfaceProps) => {
   const MAX_RIPPLES = 10;
   const { viewport } = useThree();
   const materialRef = useRef<THREE.ShaderMaterial>(null);
@@ -64,28 +63,18 @@ const WaterSurface = ({ depth, speed = 1, opacity = 1 }: WaterSurfaceProps) => {
   const vertexShader = `
   varying vec2 vUv;
   varying vec3 vPos;
-  uniform float uTime;
-  uniform float uSpeed;
 
   void main() {
     vUv = uv;
-    vec3 pos = position;
-    float time = uTime * uSpeed;
-
-    float waveMask = vUv.y;
-    float wave = sin(pos.x * 1.0 - time) * 0.2;
-    wave += sin(pos.x * 2.0 - time * 1.5) * 0.03;
-    wave += sin(pos.x * 0.5 + time * 0.8) * 0.05;
-    pos.y += wave * waveMask;
-
-    vPos = pos;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+    vPos = position;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `;
 
   const fragmentShader = `
   uniform float uOpacity;
   uniform float uTime;
+  uniform float uSpeed;
   uniform float uMaxWaveTime;
   const int MAX_RIPPLES = 10;
   uniform vec2 uRippleCenters[MAX_RIPPLES];
@@ -94,8 +83,26 @@ const WaterSurface = ({ depth, speed = 1, opacity = 1 }: WaterSurfaceProps) => {
   varying vec3 vPos;
 
   void main() {
-    float totalRipple = 0.0;
+    float time = uTime * uSpeed;
+    
+    // Sky Color
+    vec3 sky = vec3(0.0, 0.32, 0.53);
 
+    // Upper Waves
+    float waveMask = vUv.y;
+    float bgWave = sin(vUv.x * 10.0 - time) * 0.2;
+    bgWave += sin(vUv.x * 20.0 - time * 1.5) * 0.03;
+    bgWave += sin(vUv.x * 5.0 + time * 0.8) * 0.05;
+    bgWave *= waveMask;
+
+    // Boundary
+    float boundary = 0.97;
+    float surfaceLine = boundary + bgWave * 0.05;
+    float isSky = step(surfaceLine, vUv.y);
+    float isWater = 1.0 - isSky;
+
+    // Ripples
+    float totalRipple = 0.0;
     for (int i = 0; i < MAX_RIPPLES; i++) {
       float t = uTime - uRippleTimes[i];
 
@@ -109,10 +116,12 @@ const WaterSurface = ({ depth, speed = 1, opacity = 1 }: WaterSurfaceProps) => {
         float influence = smoothstep(R_prop + ringWidth, R_prop, dist)
                         * smoothstep(R_prop - ringWidth, R_prop - 0.03, dist);
 
-        float fade = 1.0 - (t / uMaxWaveTime);
+        float fade = 1.0 - (t / (uMaxWaveTime + 0.00001));
         totalRipple += cos(dist * 5.0 - t * 2.0) * influence * fade * 0.1;
       }
     }
+
+    // Final
 
     float ray1 = sin(vUv.x * 8.0 + uTime * 0.2) * 0.5 + 0.5;
     float rays = pow(ray1, 3.0);
@@ -120,9 +129,11 @@ const WaterSurface = ({ depth, speed = 1, opacity = 1 }: WaterSurfaceProps) => {
     vec3 deep = vec3(0.0, 0.05, 0.1);
     vec3 surface = vec3(0.0, 0.48, 0.77);
 
-    vec3 color = mix(deep, surface, vUv.y + 0.2 + totalRipple * 0.5);
+    vec3 color = mix(deep, surface, (vUv.y + 0.2 + totalRipple * 0.5) * isWater);
+    color = mix(color, sky, isSky);
     color += rays * 0.1;
-    color += totalRipple * vec3(0.2, 0.6, 0.2);
+    color += totalRipple * vec3(0.2, 0.6, 0.8);
+    color += bgWave * 0.1;
 
     gl_FragColor = vec4(color, uOpacity);
   }
@@ -132,9 +143,10 @@ const WaterSurface = ({ depth, speed = 1, opacity = 1 }: WaterSurfaceProps) => {
     <mesh
       ref={meshRef}
       onPointerMove={handlePointerMove}
+      onClick={handlePointerMove}
       rotation={[-Math.PI * 0, 0, 0]}
     >
-      <planeGeometry args={[viewport.width, viewport.height, 128, 128]} />
+      <planeGeometry args={[viewport.width, viewport.height, 1, 1]} />
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}
