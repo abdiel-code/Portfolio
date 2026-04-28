@@ -3,6 +3,7 @@ import WaterCanvas from "./components/canvas/WaterCanvas";
 import NavBar from "./components/Nav/NavBar";
 import { motion } from "motion/react";
 import Hero from "./components/sections/Hero";
+import Projects from "./components/sections/Projects";
 
 function App() {
   const [currentSection, setCurrentSection] = useState(0);
@@ -33,23 +34,14 @@ function App() {
         <NavBar onNavigate={setCurrentSection} />
 
         <motion.main
-          className="relative z-10 h-screen overflow-hidden"
+          className="relative z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: `-${currentSection * 100}vh` }}
           transition={{ delay: 0.5, duration: 0.8, ease: "easeInOut" }}
         >
           <Hero isActive={currentSection === 0} />
-          <motion.section
-            id="projects"
-            animate={{
-              y: currentSection === 1 ? 0 : 100,
-              opacity: currentSection === 1 ? 1 : 0,
-            }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="h-screen w-full flex items-center justify-center text-white"
-          >
-            <div>Projects</div>
-          </motion.section>
+          <Projects isActive={currentSection === 1} />
+
           {/*Skills*/}
           {/*Contact*/}
         </motion.main>
