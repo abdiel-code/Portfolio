@@ -7,7 +7,7 @@ type NavBarProps = {
 const NavBar = ({ onNavigate }: NavBarProps) => {
   const navItems = ["Hero", "Projects", "Skills", "Contact"];
   return (
-    <nav className="fixed top-14 left-0 right-0 z-50 flex justify-center items-center gap-6">
+    <nav className="fixed top-14 left-0 right-0 z-50 flex justify-center items-center gap-6 pointer-events-auto">
       {navItems.map((item, index) => (
         <Nav
           title={item}

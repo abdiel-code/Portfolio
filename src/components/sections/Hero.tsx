@@ -14,7 +14,7 @@ const Hero = ({ isActive }: HeroProps) => {
         opacity: isActive ? 1 : 0,
       }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="h-screen w-full flex items-center justify-center px-16"
+      className="h-screen w-full flex items-center justify-center px-16 pointer-events-auto"
     >
       <div className="flex items-center justify-between w-[65%] max-w-6xl">
         <motion.div
@@ -24,7 +24,11 @@ const Hero = ({ isActive }: HeroProps) => {
             x: isActive ? 0 : -50,
             opacity: isActive ? 1 : 0,
           }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 1 }}
+          transition={{
+            duration: 0.5,
+            ease: "easeOut",
+            delay: isActive ? 1 : 0,
+          }}
         >
           <h1 className="text-5xl font-bold text-white">
             Hi, I'm <span className="text-cyan-400">Abdiel Flores</span>
@@ -62,7 +66,11 @@ const Hero = ({ isActive }: HeroProps) => {
             x: isActive ? 0 : 100,
             opacity: isActive ? 1 : 0,
           }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 1 }}
+          transition={{
+            duration: 0.5,
+            ease: "easeOut",
+            delay: isActive ? 1 : 0,
+          }}
         >
           <img
             src="/fox.png"

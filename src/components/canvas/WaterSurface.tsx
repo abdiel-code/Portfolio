@@ -1,5 +1,5 @@
 import { useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 type WaterSurfaceProps = {
@@ -52,6 +52,36 @@ const WaterSurface = ({ speed = 1, opacity = 1 }: WaterSurfaceProps) => {
       }
     }
   };
+
+  useEffect(() => {
+    const handleGlobalMove = (e: PointerEvent) => {
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      const elapsedTime = currentTimeRef.current;
+      if (elapsedTime - lastWaveTime.current > 0.05) {
+        const i = rippleIndex.current % MAX_RIPPLES;
+
+        if (materialRef.current) {
+          materialRef.current.uniforms.uRippleTimes.value[i] = elapsedTime;
+          materialRef.current.uniforms.uRippleCenters.value[i].set(
+            (x * viewport.width) / 2,
+            (y * viewport.height) / 2,
+          );
+
+          lastWaveTime.current = elapsedTime;
+          rippleIndex.current++;
+        }
+      }
+    };
+
+    window.addEventListener("pointermove", handleGlobalMove);
+    window.addEventListener("click", handleGlobalMove);
+    return () => {
+      window.removeEventListener("pointermove", handleGlobalMove);
+      window.removeEventListener("click", handleGlobalMove);
+    };
+  }, [viewport]);
 
   useFrame((state) => {
     currentTimeRef.current = state.clock.elapsedTime;
@@ -140,12 +170,7 @@ const WaterSurface = ({ speed = 1, opacity = 1 }: WaterSurfaceProps) => {
 `;
 
   return (
-    <mesh
-      ref={meshRef}
-      onPointerMove={handlePointerMove}
-      onClick={handlePointerMove}
-      rotation={[-Math.PI * 0, 0, 0]}
-    >
+    <mesh ref={meshRef} rotation={[-Math.PI * 0, 0, 0]}>
       <planeGeometry args={[viewport.width, viewport.height, 1, 1]} />
       <shaderMaterial
         ref={materialRef}

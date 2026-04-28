@@ -24,7 +24,7 @@ import Bubbles from "./Bubbles";
 
 const WaterCanvas = () => {
   return (
-    <div className="fixed z-0 inset-0 bg-[#01455E]">
+    <div className="fixed z-0 inset-0 bg-[#01455E] pointer-events-auto">
       <Canvas orthographic camera={{ position: [0, 0, 5], zoom: 100 }}>
         <WaterSurface speed={1.0} opacity={1.0} />
         <Bubbles />
