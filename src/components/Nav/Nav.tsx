@@ -3,12 +3,14 @@ import { motion } from "motion/react";
 type NavProps = {
   title: string;
   delay: number;
+  index: number;
+  onNavigate: (indes: number) => void;
 };
 
-const Nav = ({ title, delay }: NavProps) => {
+const Nav = ({ title, delay, index, onNavigate }: NavProps) => {
   return (
-    <motion.a
-      href={`#${title.toLowerCase()}`}
+    <motion.button
+      onClick={() => onNavigate(index)}
       animate={{ y: [0, -50, 0] }}
       transition={{
         duration: 3,
@@ -20,7 +22,7 @@ const Nav = ({ title, delay }: NavProps) => {
        text-sm font-medium hover:bg-cyan-500/20 hover:border-cyan-400 transition-all duration-300"
     >
       {title}
-    </motion.a>
+    </motion.button>
   );
 };
 
