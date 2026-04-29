@@ -4,6 +4,7 @@ import NavBar from "./components/Nav/NavBar";
 import { motion } from "motion/react";
 import Hero from "./components/sections/Hero";
 import Projects from "./components/sections/Projects";
+import Skills from "./components/sections/Skills";
 
 function App() {
   const [currentSection, setCurrentSection] = useState(0);
@@ -41,8 +42,8 @@ function App() {
         >
           <Hero isActive={currentSection === 0} />
           <Projects isActive={currentSection === 1} />
+          <Skills isActive={currentSection === 2} />
 
-          {/*Skills*/}
           {/*Contact*/}
         </motion.main>
       </div>
