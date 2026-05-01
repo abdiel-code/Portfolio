@@ -1,4 +1,4 @@
-import { useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
@@ -33,25 +33,6 @@ const WaterSurface = ({ speed = 1, opacity = 1 }: WaterSurfaceProps) => {
     }),
     [opacity, speed],
   );
-
-  const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
-    const elapsedTime = currentTimeRef.current;
-    if (elapsedTime - lastWaveTime.current > 0.1) {
-      const point = event.point;
-      const i = rippleIndex.current % MAX_RIPPLES;
-
-      if (materialRef.current) {
-        materialRef.current.uniforms.uRippleTimes.value[i] = elapsedTime;
-        materialRef.current.uniforms.uRippleCenters.value[i].set(
-          point.x,
-          point.y,
-        );
-
-        lastWaveTime.current = elapsedTime;
-        rippleIndex.current++;
-      }
-    }
-  };
 
   useEffect(() => {
     const handleGlobalMove = (e: PointerEvent) => {
