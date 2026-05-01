@@ -1,17 +1,22 @@
 import { motion } from "motion/react";
 import type { Skill } from "../sections/Skills";
+import { useState } from "react";
 
 type SkillCardProps = {
   skill: Skill & { badge?: string };
 };
 
 const SkillCard = ({ skill }: SkillCardProps) => {
+  const [active, setActive] = useState(false);
   return (
     <motion.div
       className="group relative w-28 h-28 border border-4 border-white/10 backdrop-blur-sm bg-white/5 flex flex-col items-center 
       justify-center p-4 overflow-hidden pointer-events-auto cursor-pointer rounded-xl"
       whileHover="hover"
       initial="initial"
+      animate={active ? "hover" : "initial"}
+      onClick={() => setActive((prev) => !prev)}
+      whileTap={{ scale: 0.95 }}
     >
       <motion.div
         className="absolute bottom-0 left-0 w-full bg-cyan-500/30"
@@ -25,10 +30,16 @@ const SkillCard = ({ skill }: SkillCardProps) => {
       <motion.div
         variants={{
           initial: { y: 0 },
-          hover: { y: -6 },
+          hover: {
+            y: [-6, 0, -6],
+            transition: {
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
+          },
         }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col items-center gap-2"
+        className="flex flex-col items-center justify-center"
       >
         {skill.icon ? (
           <img

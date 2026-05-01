@@ -14,9 +14,9 @@ const Hero = ({ isActive }: HeroProps) => {
         opacity: isActive ? 1 : 0,
       }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="h-screen w-full flex items-center justify-center px-16 pointer-events-auto"
+      className="min-h-screen w-full flex items-center justify-center px-6 md:px-12 lg:px-16 pointer-events-auto"
     >
-      <div className="flex items-center justify-between w-[65%] max-w-6xl">
+      <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-6xl gap-10">
         <motion.div
           className="flex flex-col gap-4"
           initial={{ x: -50, opacity: 0 }}
@@ -30,15 +30,17 @@ const Hero = ({ isActive }: HeroProps) => {
             delay: isActive ? 1 : 0,
           }}
         >
-          <h1 className="text-5xl font-bold text-white">
+          <h1 className="text-3xl md:text-5xl font-bold text-white">
             Hi, I'm <span className="text-cyan-400">Abdiel Flores</span>
           </h1>
-          <h2 className="text-2xl text-white/70">Full-Stack Developer</h2>
-          <p className="text-white max-w-md">
+          <h2 className="text-lg md:text-2xl text-white/70">
+            Full-Stack Developer
+          </h2>
+          <p className="text-white max-w-sm md:max-w-md">
             Building real-time web applications with Rust and Next.js. Open to
             remote opportunities
           </p>
-          <div className="flex gap-4 mt-4">
+          <div className="flex sm:flex-row gap-4 mt-4 w-full sm:w-auto">
             <a
               href="https://github.com/abdiel-code"
               target="_blank"
@@ -75,7 +77,7 @@ const Hero = ({ isActive }: HeroProps) => {
           <img
             src="/fox.png"
             alt="Foxcoon"
-            className="w-64 h-64 object-contain"
+            className="w-40 h-40 md:w-64 md:h-64 object-contain"
           />
         </motion.div>
       </div>

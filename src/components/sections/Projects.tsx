@@ -13,6 +13,7 @@ export type Project = {
 
 type ProjectProps = {
   isActive: boolean;
+  sectionRef: React.RefObject<HTMLElement | null>;
 };
 
 const projects: Project[] = [
@@ -35,16 +36,17 @@ const projects: Project[] = [
   },
 ];
 
-const Projects = ({ isActive }: ProjectProps) => {
+const Projects = ({ isActive, sectionRef }: ProjectProps) => {
   return (
     <motion.section
       id="projects"
+      ref={sectionRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: isActive ? 1 : 0 }}
       transition={{ duration: 0.2 }}
-      className="h-screen w-full flex items-center justify-center px-16 pointer-events-auto"
+      className="h-screen w-full overflow-y-scroll md:justify-center snap-y snap-mandatory flex flex-col items-center px-6 md:px-12 lg:px-16 pointer-events-auto"
     >
-      <div className="flex flex-col items-center justify-center gap-8 w-full max-w-6xl">
+      <div className="flex flex-col items-center justify-center gap-6 md:gap-8 w-full max-w-6xl">
         {projects.map((project) => (
           <ProjectCard key={project.title} project={project} />
         ))}

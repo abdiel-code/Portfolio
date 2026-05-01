@@ -25,9 +25,9 @@ const skills: Skill[] = [
 
 const Skills = ({ isActive }: { isActive: boolean }) => {
   return (
-    <section className="h-screen w-full flex flex-col items-center justify-center gap-12 px-16">
+    <section className="min-h-screen w-full flex flex-col items-center justify-center gap-8 md:gap-12 px-6 md:px-12 lg:px-16 py-16">
       <motion.h2
-        className="text-4xl font-bold text-white/90"
+        className="text-2xl md:text-4xl font-bold text-white/90 text-center"
         animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
       >
         Tech Stack

@@ -8,12 +8,13 @@ type ProjectCardProps = {
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
-    <div className="flex items-center gap-12 w-full max-w-6xl group">
-      <div className="flex items-center justify-between w-full gap-16">
+    <div className="flex flex-col md:flex-row items-center justify-center min-h-screen md:min-h-0 gap-8 md:gap-12 w-full max-w-6xl group snap-start">
+      <div className="flex flex-col md:flex-row items-center justify-center md:justify-between w-full gap-8 md:gap-16">
         <motion.div
           className="relative border border-cyan-400/30 bg-cyan-500/5 backdrop-blur-md 
-             shadow-xl shadow-cyan-900/20 overflow-hidden flex items-center justify-center"
-          initial={{ borderRadius: "50%", width: "320px", height: "320px" }}
+            shadow-xl shadow-cyan-900/20 overflow-hidden flex items-center justify-center
+            w-[200px] h-[200px] md:w-[290px] md:h-[290px]"
+          initial={{ borderRadius: "50%", width: "200px", height: "200px" }}
           animate={{
             y: [0, -8, -3, -10, 0],
             x: [0, 3, -2, 4, 0],
@@ -36,13 +37,13 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
         <div className="flex flex-col flex-1 gap-5">
           <div className="space-y-2">
-            <h2 className="text-4xl font-bold text-white tracking-tight">
+            <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight">
               {project.title}
             </h2>
             <div className="h-1 w-20 bg-cyan-400 rounded-full" />
           </div>
 
-          <p className="text-white/80 text-lg leading-relaxed">
+          <p className="text-white/80 text-base md:text-lg leading-relaxed">
             {project.description}
           </p>
 
@@ -57,7 +58,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             ))}
           </div>
 
-          <div className="flex gap-4 mt-2">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-2 w-full sm:w-auto">
             {project.demo && (
               <a
                 href={project.demo}
